@@ -20,7 +20,7 @@ def com_int(P : int,n : int,r :float,t:int) :
        print("Simple Interest {}".format(str(cc1)))
        print("CI/SI percentage {}".format(str(dd1)))
        print("+------------------------------+")
-       return A 
+       return A
 
 def each_month(init : int,P : int,r : float,t : int):
        # P : the principle amount you invest each month
