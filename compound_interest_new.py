@@ -1,91 +1,97 @@
-def com_int(P : int,n : int,r :float,t:int) :
-       A = P*((1+r/n)**(n*t))
-       A = int(A)
-       aa = A
-       P1 = '{0:,}'.format(P)
-       aa1 = '{0:,}'.format(aa)
-       bb = aa - P
-       bb1 = '{0:,}'.format(bb)
-       cc = P*r*t
-       cc = int(cc)
-       cc1 = '{0:,}'.format(cc)
-       dd = bb/cc*100
-       dd = round(dd,2)
-       dd1 = '{0:,}'.format(dd)
-       print("+----------------------------+")
-       print("Initial Principle {}".format(str(P1)))
-       print("Total {} ".format(str(aa1)))
-       print("Compound Interest {} ".format(str(bb1)))
-       print(">---<")
-       print("Simple Interest {}".format(str(cc1)))
-       print("CI/SI percentage {}".format(str(dd1)))
-       print("+------------------------------+")
-       return A
+from rich import print
+import re
+def com_int(init: int, n: int, rate: float, time: int):
+    Amount = init * ((1 + rate / n) ** (n * time))
+    Amount = int(Amount)
+    bb = Amount - init
+    cc = init * rate * time
+    cc = int(cc)
+    dd = bb / cc * 100
+    dd = round(dd, 2)
+    print("+----------------------------+")
+    print(f"Initial Principle {'{0:,}'.format(init)}")
+    print(f"Total {'{0:,}'.format(Amount)} ")
+    print(f"Compound Interest {'{0:,}'.format(bb)}")
+    print(">---<")
+    print(f"Simple Interest {'{0:,}'.format(cc)}")
+    print(f"CI/SI {'{0:,}'.format(dd)} %")
+    print("+------------------------------+")
+    return Amount
 
-def each_month(init : int,P : int,r : float,t : int):
-       # P : the principle amount you invest each month
-       # r : Interest per year
-       # t : number of months
-       print("+------------------------------+")
-       result = init
-       for i in range(1,t+1):
-              result = (result+P)*(1+r/12)
-              result = int(result)
-              result1 = '{0:,}'.format(result)
-              print(" +  Month #{}| {}     ".format(i,result1))
-       print("+------------------------------+")
-       basse = init + P * t
-       diff = result - basse
-       #result = '{0:,}'.format(result)
-       basse1 = '{0:,}'.format(basse)
-       diff1 = '{0:,}'.format(diff)
-       print(" Total if CI : {}".format(result1))
-       print(" Total if stack : {}".format(basse1))
-       print(" The difference is {}".format(diff1))
-       print("+------------------------------+")
-       return result
+def each_month(init: int, Principal_month: int, rate: float, time: int, verbose = False):
+    """
+    P : the principal amount you invest each month
+    r : Interest per year
+    t : number of months
+    """
+    print("+------------------------------+")
+    result = init
+    for i in range(1, time + 1):
+        result_new = (result + Principal_month) * (1 + rate / 12)
+        # result = int(round(result, -3))
+        # result1 = '{0:,}'.format(result)
+        if verbose == "Y":
+            print(f" + Month # [red]{i}[/red]| [green]{ '{0:,}'.format(int(round(result_new, -3)))}[/green]| [blue]{'{0:,}'.format(int(round(result_new - result - Principal_month,-3)))}[/blue]")
+        else :
+            print(f" + Month # [red]{i}[/red]| [green]{'{0:,}'.format(int(round(result_new, -3)))}[/green]")
+        result = result_new
+
+    print("+------------------------------+")
+    basse = int(round(init + Principal_month * time))
+    diff = result - basse
+    basse1 = '{0:,}'.format(basse)
+    diff1 = '{0:,}'.format(diff)
+    print(f" Total if CI : {'{0:,}'.format(int(round(result_new, -3)))}")
+    print(" Total if stack : {}".format(basse1))
+    print(" The difference is {}".format(diff1))
+    print("+------------------------------+")
+    return result
 
 # Common part
-print("If you want to calculate compound interest from initial Principle, press 1")
-print("If you want to calculate CI on investment each month, press 2")
-index = input("Here : ")
-P = input("Investment each month : ")
-P = eval(P)
-P = int(P)
-init = input("Initial Principle : ")
-init = float(init)
-r = input("Interest rate : ")
-r = eval(r)
-r = float(r)
-n = 365
-t = input("Time of investment : ")
-t = eval(t)
-t = int(t)
-#########################
-total = 0
-if index == "1" : 
-       total = com_int(P,n,r,t)
-
-elif index =="2" :
-       total = each_month(init,P,r,t)
-       print("Do you want to keep investing ?")
-       jj = input("Press y or n :      ")
-       print("+------------------------------+")
-       if jj =="y" :
-              #########################
-              P1 = input("Investment each month : ")
-              P1 = eval(P1)
-              P1 = int(P1)
-              r1 = input("Interest rate : ")
-              r1 = eval(r1)
-              r1 = float(r1)
-              t1 = input("Time of investment : ")
-              t1 = eval(t1)
-              t1 = int(t1)
-              #########################
-              later = each_month(total,P1,r1,t1)
-       else :
-              pass
-else :
-  print(" +------------------------------+ ")
-  print("The fuck man ?")
+if __name__ == "__main__":
+    print("If you want to calculate compound interest from initial Principle, press 1")
+    print("If you want to calculate CI on investment each month, press 2")
+    choice = input("Here : ")
+    init = input("Initial Principle : ")
+    init = float(init)
+    r = input("Interest rate : ")
+    r = eval(r)
+    r = float(r)
+    if choice == "1":
+        t= input("Time of investment (YEARS): ")
+        n = 365
+    if choice == "2":
+        P = input("Investment each month : ")
+        P = eval(P)
+        P = int(P)
+        t = input("Time of investment (MONTHS) : ")
+        verbose = input("Do you want to show verbose (Y/N) ?")
+    t = eval(t)
+    t = int(t)
+    #########################
+    total = 0
+    if choice == "1":
+        total = com_int(init=init, n=n, rate=r, time=t)
+    elif choice == "2":
+        total = each_month(init=init, Principal_month=P, rate=r, time=t, verbose=verbose)
+        print("Do you want to keep investing ?")
+        jj = input("Press y or n :      ")
+        print("+------------------------------+")
+        if jj == "y":
+            #########################
+            P1 = input("Investment each month : ")
+            P1 = eval(P1)
+            P1 = int(P1)
+            r1 = input("Interest rate : ")
+            r1 = eval(r1)
+            r1 = float(r1)
+            t1 = input("Time of investment : ")
+            t1 = eval(t1)
+            t1 = int(t1)
+            #########################
+            later = each_month(total, P1, r1, t1, verbose='Y')
+        else:
+            pass
+    else:
+        print(" +------------------------------+ ")
+        print("ERROR")
