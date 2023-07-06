@@ -14,7 +14,7 @@ def com_int(init: int, n: int, rate: float, time: int):
     print(f"Compound Interest {'{0:,}'.format(bb)}")
     print(">---<")
     print(f"Simple Interest {'{0:,}'.format(cc)}")
-    print(f"CI/SI {'{0:,}'.format(dd)} %")
+    print(f"CI/SI [magenta]{'{0:,}[/magenta]'.format(dd)} %")
     print("+------------------------------+")
     return Amount
 
@@ -31,19 +31,21 @@ def each_month(init: int, Principal_month: int, rate: float, time: int, verbose 
         # result = int(round(result, -3))
         # result1 = '{0:,}'.format(result)
         if verbose == "Y":
-            print(f" + Month # [red]{i}[/red]| [green]{ '{0:,}'.format(int(round(result_new, -3)))}[/green]| [blue]{'{0:,}'.format(int(round(result_new - result - Principal_month,-3)))}[/blue]")
+            print(f" + Month #[red]{i}[/red]| [green]{ '{0:,}'.format(int(round(result_new, -3)))}[/green]|"
+                  f"[blue]{'{0:,}'.format(int(round(result_new - result - Principal_month,-3)))}[/blue]"
+                  f"|[magenta]{'{0:,}'.format(int(round(result_new - result - Principal_month,-3)/30))}[/magenta] [black]per day[/black]")
         else :
-            print(f" + Month # [red]{i}[/red]| [green]{'{0:,}'.format(int(round(result_new, -3)))}[/green]")
+            print(f" + Month #[red]{i}[/red]| [green]{'{0:,}'.format(int(round(result_new, -3)))}[/green]")
         result = result_new
 
     print("+------------------------------+")
     basse = int(round(init + Principal_month * time))
-    diff = result - basse
+    # diff = int(round(result - basse , -3))
     basse1 = '{0:,}'.format(basse)
-    diff1 = '{0:,}'.format(diff)
+    # diff1 = '{0:,}'.format(diff)
     print(f" Total if CI : {'{0:,}'.format(int(round(result_new, -3)))}")
     print(" Total if stack : {}".format(basse1))
-    print(" The difference is {}".format(diff1))
+    print(f" The difference is [magenta]{'{0:,}'.format(int(round(result - basse, -3)))}[/magenta]")
     print("+------------------------------+")
     return result
 
